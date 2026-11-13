@@ -1,0 +1,32 @@
+Charles = {
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1MDczODExLCJpYXQiOjE3OTQ0NjkwMTEsImp0aSI6ImM1ZDI0ZjkxYjdkZDRjZjNiYjdlYmM5OTFhZDcyZGE3IiwidXNlcl9pZCI6IjIifQ.wJG5hPaGSiMQr-tQApY4fKzhkTZQ9xYo81aTFGb5vXs",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NTA3MzgxMSwiaWF0IjoxNzk0NDY5MDExLCJqdGkiOiJiMDUyOGUzNzA1NTM0MDJmYjQ3N2QwN2JhNmRkMWU1NSIsInVzZXJfaWQiOiIyIn0.V8wWZt_TpFke5HiGXbiva0taRH5hRY_JHVOhhT8Jqgg"
+}
+Jane = {
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1MDc5NzAyLCJpYXQiOjE3OTQ0NzQ5MDIsImp0aSI6ImE0ZDZlOTc1YjEzMTRiMGE4YTNkM2U4NmU1YTgwMjAzIiwidXNlcl9pZCI6IjMifQ.XQnoMTX_wAw5n8uYh33BkeMNmI5cuCdzoxHsRGPU3PU",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NTA3OTcwMiwiaWF0IjoxNzk0NDc0OTAyLCJqdGkiOiJmYTA4OTc1ZTFkMjI0Y2I2ODk0ZDIwMjI2MDFjN2I0ZiIsInVzZXJfaWQiOiIzIn0.J815pPD1Y09qJIAdCmw7pjZ9KsNnWClVBkpqoJtvV6g"
+}
+Christina = {
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzk1MTEzNTIyLCJpYXQiOjE3OTQ1MDg3MjIsImp0aSI6ImQ4ZmNiZjQ1OWViNTQ1ZmQ4OGRkODY3Zjc2OGYyNDMyIiwidXNlcl9pZCI6IjQifQ.UZtMZDCKCckRCPxcFb2fgwvNfyevZKgekAsWhSX5i2o",
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc5NTExMzUyMiwiaWF0IjoxNzk0NTA4NzIyLCJqdGkiOiJhNTBiMzBjYTA3MTM0YmU2YmE0MmU5YzQxNDM3ZDI3NiIsInVzZXJfaWQiOiI0In0.zKLa9yDxTC2Tp0iF7lTYNWRjaytDOXC4Wnxm6Q6DZuM"
+}
+
+
+#############################################################
+#                       TO-DOs
+#############################################################
+✅ Done -> Forgot PIN / Reset PIN: You have an OTPVerification model. This is the perfect time to use it. A user enters their email, gets an OTP, and uses it to set a new account_pin.
+
+✅ Done -> Transaction Limits: Right now, KYC users have a flat 1000 limit. Make it dynamic. (e.g., Tier 1 KYC = 10,000 daily limit, Tier 2 = 100,000 daily limit).
+
+✅ Done -> Admin "Credit Account" Action: Create a custom Django Admin action that generates a Transaction record whenever you manually add money to an account, so your ledger is never out of sync.
+
+✅ Done -> Email Notification System (sending an email when money is received).
+
+Write Backend Tests:
+  Write a tests.py file. We would write code that automatically:
+  Creates two users.
+  Gives one user money.
+  Attempts a transfer.
+  Asserts that the balances updated correctly.
+  Asserts that a failed transfer creates a FAILED transaction.

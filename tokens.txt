@@ -23,7 +23,7 @@ Christina = {
 
 ✅ Done -> Email Notification System (sending an email when money is received).
 
-Write Backend Tests:
+✅ Done -> Write Backend Tests:
   Write a tests.py file. We would write code that automatically:
   Creates two users.
   Gives one user money.

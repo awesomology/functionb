@@ -368,3 +368,10 @@ class OTPVerification(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user.first_name} {self.user.last_name} - {self.is_used} - {self.purpose.capitalize()}"
+
+class NewsletterSubscriber(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

@@ -13,7 +13,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from django.contrib.auth import authenticate
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage, send_mail
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.http import FileResponse, Http404
@@ -21,7 +21,7 @@ from django.db import transaction as db_transaction
 from decimal import Decimal
 import random
 import uuid
-from .models import User, Account, Beneficiary, EmailVerificationToken, LoginAttempt, KYCDocument, Transaction, OTPVerification, validate_ng_phone
+from .models import NewsletterSubscriber, User, Account, Beneficiary, EmailVerificationToken, LoginAttempt, KYCDocument, Transaction, OTPVerification, validate_ng_phone
 from .serializers import BeneficiarySerializer, TransactionSerializer, KYCDocumentSerializer
 
 # Create your views here.
@@ -193,6 +193,23 @@ class ResendVerificationView(APIView):
             # Security: Don't reveal if email exists
             return Response({"message": "If this email exists, a link was sent."}, status=status.HTTP_200_OK)
 
+class UserProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        return Response({
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "phone": user.phone,
+            "kyc_tier": user.kyc_tier,
+            "verification_step": user.verification_step,
+            # Assuming one account for now
+            "account_number": user.accounts.first().number if user.accounts.exists() else None,
+            "balance": user.accounts.first().balance if user.accounts.exists() else 0.00
+        })
+
 class LoginView(APIView):
     def post(self, request):
         identifier = request.data.get('identifier')
@@ -266,6 +283,20 @@ class LogoutView(APIView):
             return Response({"message": "Successfully logged out."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"error": "Invalid or expired token."}, status=status.HTTP_400_BAD_REQUEST)
+
+class LockAccountView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        try:
+            # Get the refresh token from the request body
+            refresh_token = request.data.get('refresh_token')
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist() # Invalidate the session
+            return Response({"message": "Account locked securely."}, status=200)
+        except Exception:
+            return Response({"error": "Invalid token."}, status=400)
 
 class KYCUploadView(APIView):
     permission_classes = [IsAuthenticated]
@@ -756,5 +787,52 @@ class TPinConfirmOTPRequest(APIView):
         except ValidationError as e:
             # This catches the error from the helper and returns a 400
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class SubscribeView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        if not email:
+            return Response({"error": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # get_or_create prevents duplicate errors if they subscribe twice
+        subscriber, created = NewsletterSubscriber.objects.get_or_create(email=email)
+        
+        if created:
+            # Optional: Send a welcome email to the user
+            send_mail(
+                subject="Welcome to Gordon's Ledger",
+                message="Thanks for subscribing!",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=[email],
+                fail_silently=True,
+            )
+            
+        return Response({"message": "Subscribed successfully."}, status=status.HTTP_201_CREATED)
+
+class ContactView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+
+        if not all([email, subject, message]):
+            return Response({"error": "All fields are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Send the email directly to YOU (the bank admin)
+        # Create the EmailMessage instance
+        email_message = EmailMessage(
+            subject=f"Contact Form: {subject}",
+            body=f"From: {email}\n\n{message}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[settings.DEFAULT_FROM_EMAIL], # Send to yourself
+            reply_to=[email], # When you click "Reply", it replies to the user!
+        )
+
+        try:
+            email_message.send(fail_silently=False)
+            return Response({"message": "Message sent successfully."}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 

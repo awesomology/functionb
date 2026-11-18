@@ -10,7 +10,7 @@ from django.utils.html import format_html
 from decimal import Decimal
 from django.db import transaction as db_transaction
 from django.contrib.auth.admin import UserAdmin
-from .models import Beneficiary, User, Account, EmailVerificationToken, Transaction, LoginAttempt, KYCDocument, OTPVerification
+from .models import Beneficiary, NewsletterSubscriber, User, Account, EmailVerificationToken, Transaction, LoginAttempt, KYCDocument, OTPVerification
 
 # Register your models here.
 
@@ -167,5 +167,6 @@ class AccountAdmin(admin.ModelAdmin):
 admin.site.register(Beneficiary)
 admin.site.register(EmailVerificationToken)
 admin.site.register(LoginAttempt)
+admin.site.register(NewsletterSubscriber)
 admin.site.register(OTPVerification)
 admin.site.register(Transaction)

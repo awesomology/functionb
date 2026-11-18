@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'anymail',
+    'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
@@ -57,6 +58,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -133,7 +135,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
-
+#########################################
+#         Static Files Config
+#########################################
+# User uploaded files
+MEDIA_URL = 'media/'
+MEDIA_ROOT = FILEASSETS_DIR / 'media'
+# CSS, JavaScript, Images
 STATIC_URL = 'static/'
 
 
@@ -142,10 +150,17 @@ STATIC_URL = 'static/'
 #########################################
 AUTH_USER_MODEL = 'accounts.User'
 
-# User uploaded files
-MEDIA_URL = 'media/'
-MEDIA_ROOT = FILEASSETS_DIR / 'media'
+#########################################
+#            CORS Settings
+#########################################
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173", # Vite React default port
+    "http://127.0.0.1:5173",
+]
 
+#########################################
+#                 JWT
+#########################################
 from datetime import timedelta
 
 SIMPLE_JWT = {
@@ -153,6 +168,9 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
 }
 
+#########################################
+#            Email Config
+#########################################
 # Configure Anymail for Brevo
 EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"
 
@@ -162,11 +180,3 @@ ANYMAIL = {
 
 # Important: This MUST be the exact email address you verified with Brevo
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-# EMAIL_PORT = 2525
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'd37afe0faec4dd'
-# EMAIL_HOST_PASSWORD = 'f0a4330e4c9300' # NOT your login password
-# DEFAULT_FROM_EMAIL = 'Gordon\'s Ledger <noreply@gordonsledger.com>'

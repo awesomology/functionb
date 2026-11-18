@@ -5,8 +5,10 @@ urlpatterns = [
     path('signup/', views.SignupView.as_view(), name='signup'),
     path('verify-email/', views.VerifyEmailView.as_view(), name='verify-email'),
     path('resend-email/', views.ResendVerificationView.as_view(), name='resend-email'),
+    path('me/', views.UserProfileView.as_view(), name='user-profile'),
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('lock/', views.LockAccountView.as_view(), name='logout'),
     path('kyc/upload/', views.KYCUploadView.as_view(), name='kyc-upload'),
     path('kyc/file/<int:document_id>/', views.SecureKYCFileView.as_view(), name='secure-kyc-file'),
     path('kyc/status/', views.KYCStatusView.as_view(), name='kyc-status'),
@@ -20,4 +22,6 @@ urlpatterns = [
     path('apin-reset/request/confirm/', views.APinConfirmOTPRequest.as_view(), name='confirm-account-pin-otp'),
     path('tpin-reset/request/', views.TPinResetOTPRequest.as_view(), name='request-transaction-pin-otp'),
     path('tpin-reset/request/confirm/', views.TPinConfirmOTPRequest.as_view(), name='confirm-transaction-pin-otp'),
+    path('subscribe/', views.SubscribeView.as_view(), name='subscribe'),
+    path('contact/', views.ContactView.as_view(), name='contact'),
 ]
